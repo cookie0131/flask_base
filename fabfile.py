@@ -9,7 +9,7 @@ def test():
 
 def upgrade_libs():
     sudo("apt-get update")
-    sudo("apt-get upgrade")
+    sudo("apt-get upgrade -y")
 
 
 def setup():
@@ -20,13 +20,15 @@ def setup():
     sudo("apt-get install -y build-essential")
     sudo("apt-get install -y python3")
     sudo("apt-get install -y python-pip")
+    sudo("pip install --upgrade pip")
     sudo("apt-get install -y python-all-dev")
     sudo("apt-get install -y supervisor")
+    sudo("apt-get install libmysqlclient-dev")  # pip装mysql的时候需要用到
 
     with settings(warn_only=True):
         result = run('id deploy')
     if result.failed:
-        run("useradd -d /home/deploy/ deploy")
+        run("useradd -d /home/deploy/ -m deploy")
         run("gpasswd -a deploy sudo")
 
     sudo("chown -R deploy /usr/local/")
